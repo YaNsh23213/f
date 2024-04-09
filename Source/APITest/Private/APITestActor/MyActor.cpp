@@ -42,8 +42,14 @@ void AMyActor::InitPostRequest()
 
 void AMyActor::OnResponseGetRequest(FHttpRequestPtr Requset, FHttpResponsePtr Response, bool bConnectedSuccessfully)
 {
-	
+	Response->GetAllHeaders();
 	UE_LOG(LogTemp, Display, TEXT("OnResponseGetRequest %s"), *Response->GetContentAsString());
+	int32 i = 0;
+	for (auto Element : Response->GetAllHeaders())
+	{
+		UE_LOG(LogTemp, Display, TEXT("GetAllHeaders %i %s"), i, *Element);
+		i++;
+	}
 }
 
 void AMyActor::OnResponsePostRequest(FHttpRequestPtr Requset, FHttpResponsePtr Response, bool bConnectedSuccessfully)
