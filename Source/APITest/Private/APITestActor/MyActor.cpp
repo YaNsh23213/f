@@ -14,17 +14,14 @@ void AMyActor::BeginPlay()
 {
 	Super::BeginPlay();
 	InitGetRequest();
-	InitPostRequest();
 }
 
 void AMyActor::InitGetRequest()
 {
 	FHttpRequestPtr Request = FHttpModule::Get().CreateRequest();
 	Request->OnProcessRequestComplete().BindUObject(this, &AMyActor::OnResponseGetRequest);
-	FString GetToken = "";
-	Request->SetURL("https://core.gamirare.com/auth/login");
+	Request->SetURL("http://localhost:3000/auth/login");
 	Request->SetVerb("GET");
-	Request->SetHeader("Authorization", GetToken);
 	Request->ProcessRequest();
 }
 
@@ -32,11 +29,8 @@ void AMyActor::InitPostRequest()
 {
 	FHttpRequestPtr Request = FHttpModule::Get().CreateRequest();
 	Request->OnProcessRequestComplete().BindUObject(this, &AMyActor::OnResponsePostRequest);
-	FString JsonString = "";
-	Request->SetURL("https://core.gamirare.com/auth/login");
-	Request->SetVerb("POST");
-	Request->SetHeader("Content-Type", "application/json");
-	Request->SetContentAsString(JsonString);
+	Request->SetURL("http://localhost:3000/auth/check");
+	Request->SetVerb("GET");
 	Request->ProcessRequest();
 }
 
@@ -50,6 +44,7 @@ void AMyActor::OnResponseGetRequest(FHttpRequestPtr Requset, FHttpResponsePtr Re
 		UE_LOG(LogTemp, Display, TEXT("GetAllHeaders %i %s"), i, *Element);
 		i++;
 	}
+	InitPostRequest();
 }
 
 void AMyActor::OnResponsePostRequest(FHttpRequestPtr Requset, FHttpResponsePtr Response, bool bConnectedSuccessfully)
